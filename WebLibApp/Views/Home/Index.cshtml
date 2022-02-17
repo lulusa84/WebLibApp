@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Book>
+
+@{
+
+    @ViewData["Web Library"];
+}
+
+<div>
+
+    <div class="text-center">
+        <h1 class="display-4">Web Library</h1>
+        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    </div>
+
+
+</div>
+<div class="card-deck">
+    @foreach (var book in Model)
+    {
+        var PhotoPath = "~/images/" + (book.PhotoPath + ".jpg");
+
+
+        // (book.PhotoPath ?? ".jpg")
+
+
+        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+            <div class="card-header">
+                <h3>@book.Title</h3>
+
+
+            </div>
+
+            <img class="card-img-top imageThumbnail" src="@PhotoPath"
+                 asp-append-version="true" />
+
+            <div class="card-footer text-center">
+
+                @*return A string containing the url
+                     <a href="@Url.Action("details","home",new { EncryptedId = book.EncryptedId })"
+                    class="btn btn-primary m-1">View</a>*@
+
+                <a asp-controller="home" asp-action="details"
+                   asp-route-id="@book.EncryptedId"
+                   class="btn btn-primary m-1">View</a>
+
+                @*@Html.ActionLink("View", "details", "home", new{ bookId = book.EncryptedId})*@
+                @*@<a href="/home/details/@book.BookId" class="btn btn-primary m-1">View</a>*@
+
+
+                <a href="@Url.Action("edit","home",new { bookId = book.BookId })"
+                   class="btn btn-primary m-1">Edit</a>
+
+                @*<a asp-controller="home" asp-action="edit"
+                     asp-route-id="@book.BookId"
+                    class="btn btn-primary m-1">Edit</a>*@
+
+                @*<a href="#" class="btn btn-primary m-1">Edit</a>*@
+
+
+                <a href="@Url.Action("delete","home",new { bookId = book.BookId })"
+                   class="btn btn-danger m-1">Delete</a>
+
+                @*<a asp-controller="home" asp-action="delete"
+                    asp-route-id="@book.BookId"
+                    class="btn btn-danger m-1">Delete</a>*@
+
+                @*<a href="#" class="btn btn-danger m-1">Delete</a>*@
+
+                @*<a asp-controller="bookManangement" asp-action="ListCopies"
+                    asp-route-id="@book.BookId/Copies"
+                    class="btn btn-primary m-1">View</a>*@
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+
+    <script src="~/js/CustomScript.js"></script>
+    <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+}

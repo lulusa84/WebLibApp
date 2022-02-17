@@ -1,0 +1,68 @@
+﻿@model HomeDetailsViewModel
+
+@{
+    ViewBag.Title = "Book Details";
+    var PhotoPath = "~/images/" + (Model.Book.PhotoPath + ".jpg");
+
+    //(Model.Book.PhotoPath ?? ".jpg");
+
+    
+
+}
+
+    <div class="row justify-content-center m-3">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header">
+                    <h1>@Model.Book.Title</h1>
+                </div>
+
+                <div class="card-body text-center">
+                    @*<img class="card-img-top " src="~/images/emma.jpg" />*@
+                    <img class="card-img-top" src="@PhotoPath" asp-append-version="true" /> imageThumbnail
+
+                    <h4>BookId : @Model.Book.BookId</h4>
+                    @*<h4>Title : @Model.Book.Title</h4>*@
+                    <h4>Author: @Model.Book.Author</h4>
+                    <h4>Edt: @Model.Book.Edt</h4>
+                    
+
+
+                </div>
+                <div class="card-footer text-center">
+                    <a asp-controller="home" asp-action="Index"
+                       class="btn btn-primary">Index</a>
+                    @*<a href="#" class="btn btn-primary m-1">Back</a>*@
+
+                    @*<a asp-controller="home" asp-action="Edit"
+                    asp-route-id="@Model.Book.BookId"
+                    class="btn btn-primary">Edit</a>*@
+
+                    <a href="@Url.Action("edit","home",new { bookId = @Model.Book.BookId })"
+                       class="btn btn-primary m-1">Edit</a>
+                    @*<a href="#" class="btn btn-primary m-1">Edit</a>*@
+
+
+                    @*<a asp-controller="home" asp-action="Delete"
+                    asp-route-id="@Model.Book.BookId"
+                    class="btn btn-danger"> Delete</a>*@
+
+                    <a href="@Url.Action("delete","home",new { bookId = @Model.Book.BookId })"
+                       class="btn btn-danger m-1">Delete</a>
+                    @*<a href="#" class="btn btn-danger">Delete</a>*@
+
+                    @*  <a href="@Url.Action("Copies","bookManagement",new { bookId = @Model.Book.BookId })"
+                    class="btn btn-primary m-1">Copies</a> *@
+                    
+                        <a asp-controller="bookManagement" asp-action="Copies"
+                           asp-route-id="@Model.Book.BookId"
+                           class="btn btn-primary">Copies</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+@section Scripts {
+    <script src="~/js/CustomScript.js"></script>
+}

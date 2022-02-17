@@ -1,0 +1,23 @@
+
+     string.format
+
+    jsonpath
+​
+    javascript in generale
+
+    Inizia la migrazione delle altre strutture
+ 
+    JSONObject json = [..]
+	JSONObject response = [..]
+	inserire dentro response una proprietà chiamata come su js e valorizzata come il messaggio che viene mostrato
+	inserire dentro json una proprietà chiamata "response" con valore response
+	ctx.set(ProcessorContextKeys.RESPONSE, json.toString());
+	
+	ctx.appLanguage() per recuperare la lingua
+	
+	{
+
+		"response": {
+			"message": "[..]"
+		}
+	}

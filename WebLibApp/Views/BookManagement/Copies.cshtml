@@ -1,0 +1,174 @@
+﻿@model IEnumerable<WebLibApp.ViewModels.CopyViewModel>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@inject SignInManager<ApplicationUser> signInManager
+@inject IBookRepository bookRepository
+
+@{
+
+    int index = System.Convert.ToInt32(Model.GetEnumerator().Current);
+    Copy copy = Model.ElementAt(index).Copy;
+
+
+    Book book = new Book();
+
+    book = bookRepository.GetBook(copy.BookId);
+
+    String title = book.Title;
+
+    ViewData["Title"] = "CopyList";
+
+            }
+
+<h1>CopyList</h1>
+
+
+<table class="table" id="table">
+    <thead id="head">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Copy.Book.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Copy.CopyId)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.Copy.CopyType)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.IsAvailable)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.IsReservationAllowed)
+            </th>
+
+
+            <th></th>
+        </tr>
+    </thead>
+    <tbody id="body">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td id="1">
+                    @Html.DisplayFor(modelItem => title) 
+                </td>
+                <td id="2">
+                    @Html.DisplayFor(modelItem => item.Copy.CopyId)
+                </td>
+                <td id="3">
+                    @Html.DisplayFor(modelItem => item.Copy.CopyType)
+                </td>
+
+                @if (item.Copy.BorrowHistories.Count() == 0 && ! item.Copy.CopyType.ToString().Equals("C"))
+
+                {
+                    <td id="4">
+                        <a asp-controller="bookManagement" asp-action="borrowHistoryCreate"
+                           asp-route-id="@item.Copy.BookId"
+                           class="btn btn-success" id="button0">Borrow</a>
+                    </td>
+                                
+                            }
+
+                 else if(item.Copy.CopyType.ToString().Equals("C")) { 
+
+
+                    <td id="4">
+                       <a asp-controller = "bookManagement" 
+                           class="btn-disabled" id="button0">Borrow not allowed</a>
+                    </td>
+                    
+                
+                }
+
+                else
+                {
+                    @switch (signInManager.UserManager.GetUserId(signInManager.Context.User).Equals(item.Copy.BorrowHistories.First<BorrowHistory>().AppUserId))
+
+                    {
+                        case true:
+                            // (user.IsSignedIn(User) = BorrowHistory.AppUserId && item.IsAvailable = true)
+                            @if (item.IsAvailable)
+                  {
+
+                                <td id="4">
+                                    <a asp-controller="bookManagement" asp-action="borrowHistoryCreate"
+                                       asp-route-id="@item.Copy.CopyId"
+                                       class="btn btn-success" id="button1">Borrow</a>
+                                </td>
+                            }
+                            else // (user.IsSignedIn(User) = BorrowHistory.AppUserId && item.IsAvailable = false)
+                  {
+
+                                <td id="4">
+                                    <a asp-controller="bookManagement" 
+                                       class="btn-disabled" id="button2">Borrow</a>
+
+                                </td>
+                            }
+
+                            break;
+
+                        case false:
+                            // (user.IsSignedIn(User) != BorrowHistory.AppUserId && item.IsAvailable = true)
+                            @if (item.IsAvailable)
+                            {
+                                <td id="4">
+                                    <a asp-controller="bookManagement" 
+                                       class="btn-disabled" id="button3">Borrow</a>
+                                </td>
+                            }
+                            else
+                { // (user.IsSignedIn(User) != BorrowHistory.AppUserId && item.IsAvailable = false)
+                                <td id="4">
+                                    <a asp-controller="bookManagement"
+                                       class="btn-disabled" id="button4">Borrow</a>
+
+                                </td>
+                            }
+
+                            break;
+                    }
+                }
+
+
+
+                @if (item.IsReservationAllowed && (!("@a.id").Equals("button4")))
+                {
+
+
+                    <td id="5">
+                        <a asp-controller="bookReservation" asp-action="bookReservationCreate"
+                           asp-route-id="@item.Copy.CopyId"
+                           class="btn btn-success">CreateReservation</a>
+                    </td>
+
+                    @*aggiungere condizione, non è possibile prenotare prima di 15 giorni dalla scadeza del
+                        prestito più recente in elenco(BorrowHistory), e vedi se esistono altreprenotazioni,
+                        di altri utenti per lo stesso periodo *@
+                }
+
+                else if (item.IsReservationAllowed && ("@a.id").Equals("button4"))
+                {
+
+                    <td id="5">
+                        <a asp-controller="bookReservation" 
+                           class="btn-disabled" id="rbutton4">Borrow</a>
+                    </td>
+
+                }
+                else
+                {
+                    <td id="5">
+                        <a asp-controller="bookReservation" 
+                           class="btn-disabled" id="rbutton5">Reservation not allowed</a>
+                    </td>
+                }
+            </tr>
+        }
+
+    </tbody>
+</table>

@@ -1,0 +1,35 @@
+﻿@model WebLibApp.Models.BookReservation
+@{
+    ViewBag.Title = "Book Reservation for a book";
+}
+<h2>Book Reservation for a Copy</h2>
+@using (Html.BeginForm())
+{
+    @*@Html.AntiForgeryToken()*@
+<div class="form-horizontal">
+    <hr />
+    @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+    @Html.HiddenFor(model => model.CopyId) @Html.HiddenFor(model => model.ReservationDate) @Html.HiddenFor(model => model.ReservationEndDate)
+    <div class="form-group">
+        @Html.LabelFor(model => model.AppUserId, "User", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">@Html.DropDownList("AppUserId", null, htmlAttributes: new { @class = "form-control" }) </div>
+        @*@Html.ValidationMessageFor(model => model.AppUserId, "", new { @class = "text-danger" })*@
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="BookReservation" class="btn btn-primary" />
+        </div>
+    </div>
+</div>
+
+}
+<div>@Html.ActionLink("Back to Book List", "Index", "Books")</div>
+
+
+    @section Scripts {
+
+        <script src="~/js/CustomScript.js"></script>
+        <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+    }
+

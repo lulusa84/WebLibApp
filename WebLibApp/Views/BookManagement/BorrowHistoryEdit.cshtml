@@ -1,0 +1,34 @@
+﻿@model WebLibApp.Models.BorrowHistory
+@inject IBookRepository bookRepository
+@{
+    ViewBag.Title = "Return a copy";
+
+    Book book = new Book();
+    book = bookRepository.GetBook(Model.Copy.BookId);
+}
+<h2>Return a Copy</h2>
+@using (Html.BeginForm())
+{
+    @*@Html.AntiForgeryToken()*@
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" }) @Html.HiddenFor(model => model.BorrowHistoryId) @Html.HiddenFor(model => model.CopyId) @Html.HiddenFor(model => model.BorrowDate) @Html.HiddenFor(model => model.ReturnDate) @Html.HiddenFor(model => model.AppUserId)
+        <div class="form-group">
+            <div class="col-md-10">@string.Format("You are about to return {0} which was borrowed by {1} at {2}.", book.Title, Model.AppUserId, Model.BorrowDate.ToLongDateString())</div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Return" class="btn btn-primary" />
+            </div>
+        </div>
+    </div>
+
+}
+<div>@Html.ActionLink("Back to Copies", "Copies", "BookManagement")</div>
+
+@section Scripts {
+
+    <script src="~/js/CustomScript.js"></script>
+    <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+}
+

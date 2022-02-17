@@ -1,0 +1,71 @@
+﻿@model BookReservationDetailsViewModel
+@inject IBookRepository bookRepository
+@inject IBookManagementRepository bookManagementRepository
+@inject UserManager<ApplicationUser> userManager
+@{
+    ViewBag.Title = "Book Reservation Details";
+    ViewBag.UserName = Context.User.Identity.Name;
+    Model.UserName = ViewBag.UserName;
+    Book book = new Book();
+    book = bookRepository.GetBook(bookRepository.GetCopy(Model.BookReservation.CopyId).BookId);
+
+}
+
+<h1>Book Reservation Details</h1>
+<div>
+    <h4>Book reservations</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => bookRepository.GetBook(Model.BookReservation.Copy.BookId).Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => bookRepository.GetBook(Model.BookReservation.Copy.BookId).Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserName)
+            @*model => model.BorrowHistory.AppUserId*@
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+            @*model => model.BorrowHistory.AppUserId*@
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BookReservation.ReservationDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BookReservation.ReservationDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.BookReservation.ReservationEndDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.BookReservation.ReservationEndDate)
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+
+    <a asp-controller="home" asp-action="Index"
+       class="btn btn-primary">Home</a> |
+
+    <a asp-controller="bookManagement" asp-action="Copies"
+       asp-route-id=@book.BookId
+       class="btn btn-primary">Back To Copies</a>
+
+
+    @section Scripts {
+        <script src="~/js/CustomScript.js"></script>
+        <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+    }
+
+</div>

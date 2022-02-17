@@ -1,0 +1,70 @@
+﻿@model BorrowHistoryDetailsViewModel
+@inject IBookRepository bookRepository
+@inject UserManager<ApplicationUser> userManager
+    @{
+        ViewBag.Title = "BorrowHistory Details";
+        Copy copy = new Copy();
+        copy = bookRepository.GetCopy(Model.BorrowHistory.CopyId);
+        Book book = new Book();
+        book = bookRepository.GetBook(copy.BookId);
+        ViewBag.UserName = Context.User.Identity.Name;
+        Model.UserName = ViewBag.UserName;
+    }
+
+
+    <h2>Borrow History Details</h2>
+
+    <div>
+        <h4>BorrowHistory</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => book.Title)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => book.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UserName)
+                @*model => model.BorrowHistory.AppUserId*@
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UserName)
+                @*model => model.BorrowHistory.AppUserId*@
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BorrowHistory.BorrowDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BorrowHistory.BorrowDate)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.BorrowHistory.ReturnDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.BorrowHistory.ReturnDate)
+            </dd>
+
+        </dl>
+    </div>
+    <div>
+                <a asp-controller="home" asp-action="Index"
+                   class="btn btn-primary">Home</a> |
+
+                <a asp-controller="bookManagement" asp-action="Copies"
+                   asp-route-id="@Model.BorrowHistory.Copy.BookId"
+                   class="btn btn-primary">Back To Copies</a>
+    
+
+                @section Scripts {
+                    <script src="~/js/CustomScript.js"></script>
+                    <script src="~/lib/jquery-validation/jquery.validate.js"></script>
+                }
+    </div>
